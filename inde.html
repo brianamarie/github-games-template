@@ -88,6 +88,7 @@
         blocks,        // 2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a 'piece'
         actions,       // queue of user actions (inputs)
         playing,       // true|false - game is in progress
+        paused,        // true|false - game is currently paued (to differentiate need for reset)
         dt,            // time since starting this game
         current,       // the current piece
         next,          // the next piece
@@ -221,11 +222,17 @@
           case KEY.UP:     actions.push(DIR.UP);    handled = true; break;
           case KEY.DOWN:   actions.push(DIR.DOWN);  handled = true; break;
           case KEY.ESC:    lose();                  handled = true; break;
+          case KEY.SPACE:  pause();                 handled = true; break;
         }
       }
       else if (ev.keyCode == KEY.SPACE) {
-        play();
-        handled = true;
+        if(paused) {
+            restart();
+            handled = true;
+          }else{
+            play();
+            handled = true;
+          }        
       }
       if (handled)
         ev.preventDefault(); // prevent arrow keys from scrolling the page (supported in IE9+ and all other browsers)
@@ -236,6 +243,8 @@
     //-------------------------------------------------------------------------
 
     function play() { hide('start'); reset();          playing = true;  }
+    function pause() {show('start'); paused = true; playing = false;}
+    function restart() {hide('start'); playing = true;}
     function lose() { show('start'); setVisualScore(); playing = false; }
 
     function setVisualScore(n)      { vscore = n || score; invalidateScore(); }
