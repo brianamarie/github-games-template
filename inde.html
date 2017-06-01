@@ -242,7 +242,7 @@
     // GAME LOGIC
     //-------------------------------------------------------------------------
 
-    function play() { hide('start'); reset();          playing = true;  }
+    function play() { hide('start'); reset();      paused = false;  playing = true;  }
     function pause() {show('start'); paused = true; playing = false;}
     function restart() {hide('start'); paused = false; playing = true;}
     function lose() { show('start'); setVisualScore(); playing = false; }
